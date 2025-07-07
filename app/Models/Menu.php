@@ -2,26 +2,28 @@
 
 namespace App\Models;
 
-use App\Models\Post;
+use App\Models\SubMenu;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Category extends Model
+class Menu extends Model
 {
     use HasFactory;
 
     public $timestamps = true;
-    protected $table = 'categories';
+    protected $table = 'menus';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'title',
-        'slug',
+        'name',
         'description',
+        'sort',
+        'url',
+        'is_blank',
     ];
 
-    public function posts()
+    public function subMenus()
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(SubMenu::class);
     }
 }

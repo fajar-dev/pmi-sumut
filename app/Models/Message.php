@@ -2,26 +2,24 @@
 
 namespace App\Models;
 
-use App\Models\Post;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Category extends Model
+class Message extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public $timestamps = true;
-    protected $table = 'categories';
+    protected $table = 'messages';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'title',
-        'slug',
-        'description',
+        'name',
+        'email',
+        'subject',
+        'message',
+        'is_read',
     ];
-
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
-    }
 }
