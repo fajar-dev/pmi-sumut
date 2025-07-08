@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-            ->nullable()              
-            ->constrained('users') 
-            ->onDelete('set null');
+            $table->unsignedBigInteger('user_id')->nullable(); 
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('set null');
             $table->string('image')->nullable();
             $table->string('title');
             $table->string('slug')->unique();

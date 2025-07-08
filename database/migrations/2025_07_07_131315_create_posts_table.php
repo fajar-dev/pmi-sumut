@@ -15,14 +15,16 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-            ->nullable()              
-            ->constrained('users') 
-            ->onDelete('set null');
-            $table->foreignId('category_id')
-            ->nullable()              
-            ->constrained('categories') 
-            ->onDelete('set null');
+            $table->unsignedBigInteger('user_id')->nullable(); 
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('set null');
+            $table->unsignedBigInteger('category_id')->nullable(); 
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('set null');
             $table->string('image');
             $table->string('title');
             $table->string('slug')->unique();
