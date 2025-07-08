@@ -84,7 +84,7 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('image'),
+                ImageColumn::make('image')->label('Thumbnail'),
                 TextColumn::make('title')->sortable()->searchable(),
                 TextColumn::make('category.title')->sortable()->searchable(),
                 TextColumn::make('author.name')->sortable()->searchable(),
@@ -101,6 +101,10 @@ class PostResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

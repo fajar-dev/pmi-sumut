@@ -62,6 +62,10 @@ class GalleryResource extends Resource
                         ->dateTime()
                         ->sortable()
                         ->toggleable(isToggledHiddenByDefault: true),
+                    TextColumn::make('deleted_at')
+                        ->dateTime()
+                        ->sortable()
+                        ->toggleable(isToggledHiddenByDefault: true)
                 ])
                 ->filters([
                     Tables\Filters\TrashedFilter::make(),
