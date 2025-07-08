@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('icon');
+            $table->string('title');
             $table->text('description');
             $table->string('cta_url');
             $table->timestamps();
+
+            $table->index('title');
         });
     }
 

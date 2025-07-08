@@ -23,6 +23,9 @@ return new class extends Migration
             $table->string('url');
             $table->boolean('is_blank')->default(false);
             $table->timestamps();
+
+            $table->index('name');
+            $table->index('sort');
         });
     }
 

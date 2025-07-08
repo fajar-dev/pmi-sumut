@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('content')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('title');
         });
     }
 

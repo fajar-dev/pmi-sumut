@@ -27,6 +27,9 @@ return new class extends Migration
             $table->string('maps_url')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('slug');
+            $table->index('title');
         });
     }
 

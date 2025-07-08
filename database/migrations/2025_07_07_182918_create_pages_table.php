@@ -23,6 +23,9 @@ return new class extends Migration
             $table->text('content');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('slug');
+            $table->index('title');
         });
     }
 

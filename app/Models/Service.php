@@ -15,6 +15,7 @@ class Service extends Model
 
     protected $fillable = [
         'icon',
+        'title',
         'description',
         'cta_url'
     ];

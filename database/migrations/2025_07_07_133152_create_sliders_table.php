@@ -19,6 +19,9 @@ return new class extends Migration
             $table->boolean('featured')->default(true);
             $table->integer('sort')->default(1);
             $table->timestamps();
+
+            $table->index('title');
+            $table->index('sort');
         });
     }
 
