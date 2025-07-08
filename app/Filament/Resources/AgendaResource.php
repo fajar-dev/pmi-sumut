@@ -3,38 +3,31 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
-use App\Models\Post;
 use Filament\Tables;
-use App\Enum\PostStatus;
+use App\Models\Agenda;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
-use Filament\Tables\Columns\SelectColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\DateTimePicker;
-use App\Filament\Resources\PostResource\Pages;
+use App\Filament\Resources\AgendaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\PostResource\RelationManagers;
-use App\Models\Category;
+use App\Filament\Resources\AgendaResource\RelationManagers;
 
-class PostResource extends Resource
+class AgendaResource extends Resource
 {
-    protected static ?string $model = Post::class;
+    protected static ?string $model = Agenda::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-
-    protected static ?string $navigationGroup = 'News';
-
-    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
     public static function form(Form $form): Form
     {
@@ -42,6 +35,8 @@ class PostResource extends Resource
             ->schema([
                 Section::make('Main Content')->schema(
                     [
+                        FileUpload::make('image')->image()->directory('agendas/thumbnails')
+                            ->columnSpanFull(),
                         TextInput::make('title')
                             ->live()
                             ->required()->minLength(1)->maxLength(150)
@@ -53,30 +48,31 @@ class PostResource extends Resource
                                 $set('slug', Str::slug($state));
                             }),
                         TextInput::make('slug')->required()->minLength(1)->unique(ignoreRecord: true)->maxLength(150),
-                        RichEditor::make('content')
+                        DatePicker::make('start_date')
                             ->required()
-                            ->fileAttachmentsDirectory('posts/images')->columnSpanFull(),
-                    ]
-                )->columns(2),
-                Section::make('Meta')->schema(
-                    [
-                        FileUpload::make('image')->image()->directory('posts/thumbnails')->required(),
-                        DateTimePicker::make('published_at')->required(),
-                        Select::make('status')
-                        ->options(PostStatus::status)
-                        ->required(),
+                            ->displayFormat('d F Y H:i'),
+                        DatePicker::make('end_date')
+                            ->displayFormat('d F Y H:i'),
+                        Textarea::make('address')
+                            ->required()
+                            ->maxLength(255)
+                            ->columnSpanFull(),
+                        TextInput::make('map_url')
+                            ->url()
+                            ->maxLength(255)
+                            ->label('Google Map Link')
+                            ->columnSpanFull(),
                         Select::make('user_id')
                             ->relationship('author', 'name')
                             ->searchable()
                             ->preload()
-                            ->required(),
-                        Select::make('category')
-                            ->relationship('category', 'title')
-                            ->searchable()
-                            ->preload()
-                            ->required(),
+                            ->required()
+                            ->columnSpanFull(),
+                        RichEditor::make('content')
+                            ->required()
+                            ->fileAttachmentsDirectory('agendas/images')->columnSpanFull(),
                     ]
-                ),
+                )->columns(2),
             ]);
     }
 
@@ -84,15 +80,20 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('image')->label('Thumbnail'),
-                TextColumn::make('title')->sortable()->searchable(),
-                TextColumn::make('category.title')->sortable()->searchable(),
-                TextColumn::make('author.name')->sortable()->searchable(),
-                TextColumn::make('published_at')->date('Y-m-d')->sortable()->searchable(),
-                SelectColumn::make('status')
-                    ->options(PostStatus::status)
+                ImageColumn::make('image')->label('Thumbail'),
+                TextColumn::make('title')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('address')
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('start_date')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('end_date')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('author.name')->sortable()->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -104,28 +105,22 @@ class PostResource extends Resource
                 TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
-                    SelectFilter::make('category_id')
-                    ->options(
-                        fn (Category $query) => $query->orderBy('title')->pluck('title', 'id')
-                    )
-                    ->selectablePlaceholder(true)
-                    ->label('Category'),
+                    Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
-            ]);
+                    Tables\Actions\BulkActionGroup::make([
+                        Tables\Actions\DeleteBulkAction::make(),
+                        Tables\Actions\ForceDeleteBulkAction::make(),
+                        Tables\Actions\RestoreBulkAction::make(),
+                    ]),
+                ]);
     }
 
     public static function getRelations(): array
@@ -138,9 +133,9 @@ class PostResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPosts::route('/'),
-            'create' => Pages\CreatePost::route('/create'),
-            'edit' => Pages\EditPost::route('/{record}/edit'),
+            'index' => Pages\ListAgendas::route('/'),
+            'create' => Pages\CreateAgenda::route('/create'),
+            'edit' => Pages\EditAgenda::route('/{record}/edit'),
         ];
     }
 
