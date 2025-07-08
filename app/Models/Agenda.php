@@ -32,4 +32,9 @@ class Agenda extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function visitorCount()
+    {
+        return $this->hasMany(Visitor::class, 'agenda_id', 'id')->count();
+    }
 }

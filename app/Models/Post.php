@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Visitor;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
@@ -44,6 +45,10 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function visitorCount()
+    {
+        return $this->hasMany(Visitor::class, 'post_id', 'id')->count();
+    }
 
     public function scopePublished($query)
     {

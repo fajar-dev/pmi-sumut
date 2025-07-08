@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Visitor;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,5 +29,10 @@ class Page extends Model
     public function author()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function visitorCount()
+    {
+        return $this->hasMany(Visitor::class, 'page_id', 'id')->count();
     }
 }
