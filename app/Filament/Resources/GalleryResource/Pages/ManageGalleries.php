@@ -4,21 +4,16 @@ namespace App\Filament\Resources\GalleryResource\Pages;
 
 use App\Filament\Resources\GalleryResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ManageRecords;
 
-class EditGallery extends EditRecord
+class ManageGalleries extends ManageRecords
 {
     protected static string $resource = GalleryResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\CreateAction::make(),
         ];
-    }
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->getResource()::getUrl('index');
     }
 }

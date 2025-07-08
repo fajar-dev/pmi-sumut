@@ -8,16 +8,23 @@ use App\Models\Gallery;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\RestoreBulkAction;
 use App\Filament\Resources\GalleryResource\Pages;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\GalleryResource\RelationManagers;
+use App\Filament\Resources\GalleryResource\Pages\ManageGalleries;
 
 class GalleryResource extends Resource
 {
@@ -29,25 +36,23 @@ class GalleryResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('Add New Gallery')
-                    ->schema([
-                        FileUpload::make('image')
-                            ->image()
-                            ->directory('gallery')
-                            ->required(),
-
-                        TextInput::make('title')
-                            ->required()
-                            ->maxLength(255),
-                        Textarea::make('description')->maxLength(255),
-                    ])
-                    ->columns(1)
+                FileUpload::make('image')
+                    ->image()
+                    ->directory('gallery')
+                    ->required()
+                    ->columnSpanFull(),
+                TextInput::make('title')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+                Textarea::make('description')->maxLength(255)
+                    ->columnSpanFull(),
             ]);
     }
 
     public static function table(Table $table): Table
     {
-            return $table
+        return $table
                 ->columns([
                     ImageColumn::make('image'),
                     TextColumn::make('title')
@@ -83,27 +88,10 @@ class GalleryResource extends Resource
                 ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGalleries::route('/'),
-            'create' => Pages\CreateGallery::route('/create'),
-            'edit' => Pages\EditGallery::route('/{record}/edit'),
+            'index' => Pages\ManageGalleries::route('/'),
         ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
     }
 }
