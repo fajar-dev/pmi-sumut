@@ -3,6 +3,8 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\SubMenu;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SubMenuPolicy
 {

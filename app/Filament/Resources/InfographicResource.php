@@ -27,6 +27,10 @@ class InfographicResource extends Resource implements HasShieldPermissions
 
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
+    protected static ?string $navigationGroup = 'Publication';
+
+    protected static ?int $navigationSort = 2;
+
     public static function getPermissionPrefixes(): array
     {
         return [

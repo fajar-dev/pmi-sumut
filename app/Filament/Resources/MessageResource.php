@@ -26,6 +26,7 @@ class MessageResource extends Resource implements HasShieldPermissions
     {
         return [
             'view',
+            'view_any',
             'delete',
             'delete_any',
             'force_delete',

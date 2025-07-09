@@ -34,6 +34,10 @@ class GalleryResource extends Resource implements HasShieldPermissions
 
     protected static ?string $navigationIcon = 'heroicon-o-photo';
 
+    protected static ?string $navigationGroup = 'Publication';
+
+    protected static ?int $navigationSort = 3;
+
     public static function getPermissionPrefixes(): array
     {
         return [

@@ -30,6 +30,10 @@ class AgendaResource extends Resource implements HasShieldPermissions
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
+    protected static ?string $navigationGroup = 'Publication';
+
+    protected static ?int $navigationSort = 1;
+
     public static function getPermissionPrefixes(): array
     {
         return [
