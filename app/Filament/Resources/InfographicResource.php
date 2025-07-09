@@ -25,6 +25,8 @@ class InfographicResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Infographic::class;
 
+    protected static ?string $navigationLabel = 'Infographic';
+
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
     protected static ?string $navigationGroup = 'Publication';

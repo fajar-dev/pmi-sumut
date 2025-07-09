@@ -31,6 +31,8 @@ class PostResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Post::class;
 
+    protected static ?string $navigationLabel = 'Post';
+
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?string $navigationGroup = 'News';

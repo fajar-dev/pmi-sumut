@@ -26,6 +26,8 @@ class SubMenuResource extends Resource implements HasShieldPermissions
 {
    protected static ?string $model = SubMenu::class;
 
+    protected static ?string $navigationLabel = 'Sub Menu';
+
     protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
     protected static ?string $navigationGroup = 'Navigation';

@@ -25,7 +25,7 @@ class ServiceResource extends Resource implements HasShieldPermissions
 
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Setting';
 
     protected static ?int $navigationSort = 4;
 

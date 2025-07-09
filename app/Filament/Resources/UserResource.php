@@ -21,9 +21,11 @@ class UserResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = User::class;
 
+    protected static ?string $navigationLabel = 'User';
+
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = 'User Managements';
+    protected static ?string $navigationGroup = 'User Management';
 
     protected static ?int $navigationSort = 2;
 

@@ -28,6 +28,8 @@ class AgendaResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Agenda::class;
 
+    protected static ?string $navigationLabel = 'Agenda';
+
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
     protected static ?string $navigationGroup = 'Publication';

@@ -23,6 +23,8 @@ class MenuResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Menu::class;
 
+    protected static ?string $navigationLabel = 'Menu';
+
     protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
     protected static ?string $navigationGroup = 'Navigation';

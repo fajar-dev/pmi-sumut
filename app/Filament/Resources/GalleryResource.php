@@ -32,6 +32,8 @@ class GalleryResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Gallery::class;
 
+    protected static ?string $navigationLabel = 'Gallery';
+
     protected static ?string $navigationIcon = 'heroicon-o-photo';
 
     protected static ?string $navigationGroup = 'Publication';

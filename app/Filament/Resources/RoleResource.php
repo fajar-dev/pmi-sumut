@@ -170,7 +170,7 @@ class RoleResource extends Resource implements HasShieldPermissions
 
     public static function getNavigationGroup(): ?string
     {
-        return 'User Managements';
+        return 'User Management';
     }
 
     public static function getNavigationLabel(): string

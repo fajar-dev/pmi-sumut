@@ -18,6 +18,8 @@ use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
 class MessageResource extends Resource implements HasShieldPermissions
 {
+    protected static ?string $navigationLabel = 'Message';
+
     protected static ?string $model = Message::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-envelope';

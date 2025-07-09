@@ -20,11 +20,13 @@ use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
 class PartnerResource extends Resource implements HasShieldPermissions
 {
+    protected static ?string $navigationLabel = 'Partner';
+
     protected static ?string $model = Partner::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-link';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Setting';
 
     protected static ?int $navigationSort = 3;
 

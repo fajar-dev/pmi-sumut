@@ -22,6 +22,8 @@ class CategoryResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Category::class;
 
+    protected static ?string $navigationLabel = 'Category';
+
     protected static ?string $navigationIcon = 'heroicon-o-folder';
 
     protected static ?string $navigationGroup = 'News';
