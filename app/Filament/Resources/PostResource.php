@@ -6,6 +6,7 @@ use Filament\Forms;
 use App\Models\Post;
 use Filament\Tables;
 use App\Enum\PostStatus;
+use App\Models\Category;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
@@ -24,9 +25,9 @@ use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\PostResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PostResource\RelationManagers;
-use App\Models\Category;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class PostResource extends Resource
+class PostResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Post::class;
 
@@ -35,6 +36,22 @@ class PostResource extends Resource
     protected static ?string $navigationGroup = 'News';
 
     protected static ?int $navigationSort = 1;
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'restore',
+            'restore_any',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+        ];
+    }
 
     public static function form(Form $form): Form
     {

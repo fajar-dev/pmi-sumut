@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
+use App\Models\Menu;
 use Filament\Tables;
 use App\Models\Submenu;
 use Filament\Forms\Form;
@@ -19,9 +20,9 @@ use Filament\Tables\Columns\TextInputColumn;
 use App\Filament\Resources\SubmenuResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SubmenuResource\RelationManagers;
-use App\Models\Menu;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class SubmenuResource extends Resource
+class SubmenuResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Submenu::class;
 
@@ -30,6 +31,20 @@ class SubmenuResource extends Resource
     protected static ?string $navigationGroup = 'Navigation';
 
     protected static ?int $navigationSort = 2;
+
+        public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+        ];
+    }
 
     public static function form(Form $form): Form
     {

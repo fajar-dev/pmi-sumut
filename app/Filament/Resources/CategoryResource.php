@@ -16,8 +16,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\CategoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CategoryResource\RelationManagers;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class CategoryResource extends Resource
+class CategoryResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Category::class;
 
@@ -26,6 +27,20 @@ class CategoryResource extends Resource
     protected static ?string $navigationGroup = 'News';
 
     protected static ?int $navigationSort = 2;
+
+        public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+        ];
+    }
 
     public static function form(Form $form): Form
     {

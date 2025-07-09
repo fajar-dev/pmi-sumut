@@ -20,8 +20,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\PageResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PageResource\RelationManagers;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class PageResource extends Resource
+class PageResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Page::class;
 
@@ -30,6 +31,22 @@ class PageResource extends Resource
     protected static ?string $navigationGroup = 'Navigation';
 
     protected static ?int $navigationSort = 3;
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'restore',
+            'restore_any',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+        ];
+    }
 
     public static function form(Form $form): Form
     {

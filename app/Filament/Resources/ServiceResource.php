@@ -17,8 +17,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ServiceResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ServiceResource\RelationManagers;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class ServiceResource extends Resource
+class ServiceResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Service::class;
 
@@ -27,6 +28,20 @@ class ServiceResource extends Resource
     protected static ?string $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 4;
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+        ];
+    }
 
     public static function form(Form $form): Form
     {

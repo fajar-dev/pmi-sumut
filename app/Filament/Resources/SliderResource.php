@@ -25,8 +25,9 @@ use App\Filament\Resources\SliderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SliderResource\RelationManagers;
 use App\Filament\Resources\SliderResource\Pages\ManageSliders;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class SliderResource extends Resource
+class SliderResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Slider::class;
 
@@ -35,6 +36,20 @@ class SliderResource extends Resource
     protected static ?string $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 2;
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+        ];
+    }
 
     public static function form(Form $form): Form
     {
