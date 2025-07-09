@@ -15,7 +15,7 @@ class SubMenuPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_sub_menu');
+        return $user->can('view_any_sub::menu');
     }
 
     /**
@@ -23,7 +23,7 @@ class SubMenuPolicy
      */
     public function view(User $user, SubMenu $subMenu): bool
     {
-        return $user->can('view_sub_menu');
+        return $user->can('view_sub::menu');
     }
 
     /**
@@ -31,7 +31,7 @@ class SubMenuPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_sub_menu');
+        return $user->can('create_sub::menu');
     }
 
     /**
@@ -39,7 +39,7 @@ class SubMenuPolicy
      */
     public function update(User $user, SubMenu $subMenu): bool
     {
-        return $user->can('update_sub_menu');
+        return $user->can('update_sub::menu');
     }
 
     /**
@@ -47,7 +47,7 @@ class SubMenuPolicy
      */
     public function delete(User $user, SubMenu $subMenu): bool
     {
-        return $user->can('delete_sub_menu');
+        return $user->can('delete_sub::menu');
     }
 
     /**
@@ -55,7 +55,7 @@ class SubMenuPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_sub_menu');
+        return $user->can('delete_any_sub::menu');
     }
 
     /**
@@ -63,7 +63,7 @@ class SubMenuPolicy
      */
     public function forceDelete(User $user, SubMenu $subMenu): bool
     {
-        return $user->can('force_delete_sub_menu');
+        return $user->can('force_delete_sub::menu');
     }
 
     /**
@@ -71,7 +71,7 @@ class SubMenuPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_sub_menu');
+        return $user->can('force_delete_any_sub::menu');
     }
 
     /**
@@ -79,7 +79,7 @@ class SubMenuPolicy
      */
     public function restore(User $user, SubMenu $subMenu): bool
     {
-        return $user->can('restore_sub_menu');
+        return $user->can('restore_sub::menu');
     }
 
     /**
@@ -87,7 +87,7 @@ class SubMenuPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_sub_menu');
+        return $user->can('restore_any_sub::menu');
     }
 
     /**
@@ -95,7 +95,7 @@ class SubMenuPolicy
      */
     public function replicate(User $user, SubMenu $subMenu): bool
     {
-        return $user->can('replicate_sub_menu');
+        return $user->can('replicate_sub::menu');
     }
 
     /**
@@ -103,6 +103,6 @@ class SubMenuPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_sub_menu');
+        return $user->can('reorder_sub::menu');
     }
 }
