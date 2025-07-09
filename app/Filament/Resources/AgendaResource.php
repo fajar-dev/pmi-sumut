@@ -22,12 +22,29 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\AgendaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AgendaResource\RelationManagers;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class AgendaResource extends Resource
+class AgendaResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Agenda::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'restore',
+            'restore_any',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+        ];
+    }
 
     public static function form(Form $form): Form
     {

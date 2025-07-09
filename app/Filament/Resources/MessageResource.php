@@ -14,12 +14,26 @@ use Filament\Tables\Columns\CheckboxColumn;
 use App\Filament\Resources\MessageResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MessageResource\RelationManagers;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class MessageResource extends Resource
+class MessageResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Message::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-envelope';
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+            'restore',
+            'restore_any',
+        ];
+    }
 
     public static function getNavigationBadge(): ?string
     {

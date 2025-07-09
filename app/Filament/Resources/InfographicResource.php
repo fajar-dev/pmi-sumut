@@ -19,12 +19,29 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\InfographicResource\Pages;
 use App\Filament\Resources\InfographicResource\RelationManagers;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class InfographicResource extends Resource
+class InfographicResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Infographic::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'restore',
+            'restore_any',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+        ];
+    }
 
     public static function form(Form $form): Form
     {
