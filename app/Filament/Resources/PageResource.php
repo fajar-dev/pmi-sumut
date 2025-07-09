@@ -2,16 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PageResource\Pages;
-use App\Filament\Resources\PageResource\RelationManagers;
-use App\Models\Page;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Page;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PageResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PageResource\RelationManagers;
 
 class PageResource extends Resource
 {
@@ -27,7 +35,31 @@ class PageResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Section::make('Main Content')->schema(
+                    [
+                        FileUpload::make('image')->image()->directory('pages/thumbnails'),
+                        TextInput::make('title')
+                            ->live()
+                            ->required()->minLength(1)->maxLength(150)
+                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                                if ($operation === 'edit') {
+                                    return;
+                                }
+
+                                $set('slug', Str::slug($state));
+                            }),
+                        TextInput::make('slug')->required()->minLength(1)->unique(ignoreRecord: true)->maxLength(150),
+                        RichEditor::make('content')
+                            ->required()
+                            ->fileAttachmentsDirectory('pages/images')->columnSpanFull(),
+                        Select::make('user_id')
+                            ->relationship('author', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                    ]
+                )->columns(1),
+                
             ]);
     }
 
@@ -35,17 +67,37 @@ class PageResource extends Resource
     {
         return $table
             ->columns([
-                //
+                ImageColumn::make('image')->label('Thumbnail'),
+                TextColumn::make('title')->sortable()->searchable(),
+                TextColumn::make('slug')
+                    ->label('URL Slug')
+                    ->sortable()
+                    ->searchable()
+                    ->formatStateUsing(fn ($state) => '/page/' . $state)
+                    ->url(fn ($record) => url('/page/' . $record->slug), true)
+                    ->openUrlInNewTab(),           
+                TextColumn::make('author.name')->sortable()->searchable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -64,5 +116,13 @@ class PageResource extends Resource
             'create' => Pages\CreatePage::route('/create'),
             'edit' => Pages\EditPage::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
