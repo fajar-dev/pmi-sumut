@@ -8,6 +8,7 @@ use App\Models\Gallery;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -47,6 +48,11 @@ class GalleryResource extends Resource
                     ->columnSpanFull(),
                 Textarea::make('description')->maxLength(255)
                     ->columnSpanFull(),
+                Select::make('user_id')
+                    ->relationship('author', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
             ]);
     }
 
@@ -59,6 +65,7 @@ class GalleryResource extends Resource
                         ->searchable()
                         ->sortable(),
                     TextColumn::make('description')->sortable()->searchable(),
+                    TextColumn::make('author.name')->sortable()->searchable(),
                     TextColumn::make('created_at')
                         ->dateTime()
                         ->sortable()

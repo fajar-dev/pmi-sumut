@@ -20,7 +20,7 @@ return new class extends Migration
                 ->onDelete('set null');
             $table->string('image');
             $table->string('title');
-            $table->string('content')->nullable();
+            $table->text('content');
             $table->softDeletes();
             $table->timestamps();
 
