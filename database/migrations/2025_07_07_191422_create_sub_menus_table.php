@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sub_menus', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('menu_id'); 
+            $table->unsignedBigInteger('menu_id');
             $table->foreign('menu_id')
                 ->references('id')
                 ->on('menus')

@@ -4,35 +4,30 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Slider;
+use App\Models\Submenu;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Actions\EditAction;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Forms\Components\FileUpload;
-use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Columns\CheckboxColumn;
-use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextInputColumn;
-use Filament\Tables\Actions\DeleteBulkAction;
-use App\Filament\Resources\SliderResource\Pages;
+use App\Filament\Resources\SubmenuResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SliderResource\RelationManagers;
-use App\Filament\Resources\SliderResource\Pages\ManageSliders;
+use App\Filament\Resources\SubmenuResource\RelationManagers;
+use App\Models\Menu;
 
-class SliderResource extends Resource
+class SubmenuResource extends Resource
 {
-    protected static ?string $model = Slider::class;
+    protected static ?string $model = Submenu::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Navigation';
 
     protected static ?int $navigationSort = 2;
 
@@ -40,18 +35,28 @@ class SliderResource extends Resource
     {
         return $form
             ->schema([
-                FileUpload::make('image')->image()->directory('sliders')->label('Image (1920x800)')->required()->columnSpanFull(),
-                TextInput::make('title')
-                        ->required()
-                        ->maxLength(255)->columnSpanFull(),
+                Select::make('menu_id')
+                    ->relationship('menu', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required()
+                    ->columnSpanFull(),
+                TextInput::make('name')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 Textarea::make('description')
-                        ->required()
-                        ->maxLength(255)->columnSpanFull(),
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+                TextInput::make('url')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpanFull(),
                 TextInput::make('sort')
                         ->numeric()
                         ->default(1)
                         ->required()->columnSpanFull(),
-                Checkbox::make('featured')->default(true)->columnSpanFull(),
+                Checkbox::make('is_blank')->label('Redirect to new tab')->default(false)->columnSpanFull(),
             ]);
     }
 
@@ -59,13 +64,13 @@ class SliderResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('image'),
-                TextColumn::make('title')->sortable()->searchable(),
+                TextColumn::make('menu.name')->sortable()->searchable(),
+                TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('description')->sortable()->searchable(),
+                TextColumn::make('url')->sortable()->searchable(),
                 TextInputColumn::make('sort')
                     ->sortable()
                     ->rules(['numeric', 'min:1']),
-                CheckboxColumn::make('featured'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -76,7 +81,12 @@ class SliderResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('menu_id')
+                    ->options(
+                        fn (Menu $query) => $query->orderBy('name')->pluck('name', 'id')
+                    )
+                    ->selectablePlaceholder(true)
+                    ->label('Category'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -92,7 +102,7 @@ class SliderResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSliders::route('/'),
+            'index' => Pages\ManageSubmenus::route('/'),
         ];
     }
 }
