@@ -27,12 +27,10 @@ class GeneralPage extends Page implements HasForms
 
     protected static ?string $title = 'General Setting';
 
-    // Tambahkan properti untuk menampung state
     public ?array $data = [];
 
     public function mount(): void
     {
-        // Ambil data pertama dari tabel general, kalau tidak ada, buat kosong
         $general = General::first();
         $this->form->fill(
             $general ? $general->toArray() : []
