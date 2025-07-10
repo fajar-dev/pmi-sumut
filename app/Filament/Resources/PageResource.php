@@ -26,7 +26,7 @@ class PageResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Page::class;
 
-    protected static ?string $navigationLabel = 'Page';
+    protected static ?string $navigationLabel = 'Custom Page';
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 

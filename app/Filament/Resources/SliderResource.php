@@ -31,6 +31,8 @@ class SliderResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Slider::class;
 
+    protected static ?string $navigationLabel = 'Slider';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Setting';
