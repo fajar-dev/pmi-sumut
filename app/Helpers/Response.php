@@ -141,4 +141,20 @@ abstract class Response
 
         return response()->json($content, self::STATUS_NOT_FOUND);
     }
+
+    /**
+     * Response bad request.
+     *
+     * @param string $message
+     * @return JsonResponse
+     */
+    public static function badRequest(string $message = 'Bad Request'): JsonResponse
+    {
+        $content = [
+            'success' => false,
+            'message' => $message
+        ];
+
+        return response()->json($content, self::STATUS_BAD_REQUEST);
+    }
 }

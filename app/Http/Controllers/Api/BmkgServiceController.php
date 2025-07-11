@@ -21,7 +21,7 @@ class BmkgServiceController extends Controller
         try {
             $result = $this->bmkgService->getLatestEarthquake();
             if (!$result || !isset($result['Infogempa']['gempa'])) {
-                return Response::error(null, 'Data gempa tidak ditemukan', 404);
+                return Response::notFound('No earthquake data found');
             }
             $data = $this->bmkgService->formatLatestEarthquake($result);
             return Response::success($data, 'Latest earthquake data retrieved successfully');
