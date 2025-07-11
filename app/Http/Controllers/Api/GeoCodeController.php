@@ -27,7 +27,6 @@ class GeoCodeController extends Controller
 
         try {
             $result = $this->openStreetMapService->getGeoCode($latitude, $longitude);
-            // return $result;
             $data = $this->openStreetMapService->formatGeoCode($result);
             return Response::success($data, 'Geocode data retrieved successfully');
         } catch (\Exception $e) {
