@@ -16,4 +16,6 @@ Route::prefix('/bmkg-service')->group(function () {
     Route::get('/lastest-earthquake', [BmkgServiceController::class, 'latestEarthquake']);
     Route::get('/current-weather', [BmkgServiceController::class, 'currentWeather']);
     Route::get('/forecast-weather', [BmkgServiceController::class, 'forecastWeather']);
+    Route::get('/early-warning', [BmkgServiceController::class, 'earlyWarning']);
+    
 });  

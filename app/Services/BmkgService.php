@@ -8,11 +8,13 @@ class BmkgService
 {
     protected $apiEarthquakeUrl;
     protected $apiWeatherUrl;
+    protected $apiWeatherApiKey;
 
     public function __construct()
     {
         $this->apiEarthquakeUrl = config('bmkg.api_earthquake_url');
         $this->apiWeatherUrl = config('bmkg.api_weather_url');
+        $this->apiWeatherApiKey = config('bmkg.api_weather_api_key');
     }
 
     protected function sendRequestEarthquake($endpoint)
@@ -30,6 +32,7 @@ class BmkgService
     {
         $response = Http::withHeaders([
                 'Accept' => 'application/json',
+                'x-api-key' => $this->apiWeatherApiKey,
             ])
             ->asForm()
             ->get($this->apiWeatherUrl . $endpoint);
@@ -167,6 +170,25 @@ class BmkgService
                 'visibility'    => $forecast['vs_text'] ?? null,
             ];
         }, $g['cuaca'][0] ?? []),
+        ];
+    }
+
+    public function getEarlyWarning($longitude, $latitude)
+    {
+        return $this->sendRequestWeather('/v1/public/weather/warning?long=' . $longitude . '&lat=' . $latitude);
+    }
+    
+    public function formatEarlyWarning($raw)
+    {
+        $g = $raw['data']['today'] ?? [];
+
+        return [
+            'id' => $g['description']['ID_Kode'] ?? null,
+            'dateStart' => $g['description']['date_start'] ?? null,
+            'dateExpired' => $g['description']['expired'] ?? null,
+            'headline' => $g['description']['headline'] ?? null,
+            'content' =>  $g['description']['description'] ?? null,
+            'timezone' => $g['description']['timezone'] ?? null,
         ];
     }
 }

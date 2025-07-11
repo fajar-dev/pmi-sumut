@@ -68,4 +68,22 @@ class BmkgServiceController extends Controller
             return Response::error(null, $e->getMessage(), 500);
         }
     }
+
+    public function earlyWarning(Request $request)
+    {
+        $longitude = $request->input('longitude', $this->defaultWeatherLongitude);
+        $latitude = $request->input('latitude', $this->defaultWeatherLatitude);
+
+        try {
+            $result = $this->bmkgService->getEarlyWarning($longitude, $latitude);
+            // return $result;
+            if (!$result || !isset($result['data']) || empty($result['data']['today'])) {
+            return Response::notFound('No weather data found for today');
+        }
+            $data = $this->bmkgService->formatEarlyWarning($result);
+            return Response::success($data, 'Early warning data retrieved successfully');
+        } catch (\Exception $e) {
+            return Response::error(null, $e->getMessage(), 500);
+        }
+    }
 }
