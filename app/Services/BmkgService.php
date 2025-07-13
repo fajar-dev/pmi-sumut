@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use DateTime;
+use DateTimeZone;
 use Illuminate\Support\Facades\Http;
 
 class BmkgService
@@ -81,7 +83,7 @@ class BmkgService
             ],
             'administrativeAreaLevel2' => [
                 'id'    => $g['lokasi']['adm2'] ?? null,
-                'name'  => $g['lokasi']['kabupaten'] ?? null,
+                'name'  => $g['lokasi']['kotkab'] ?? null,
             ],
             'administrativeAreaLevel3' => [
                 'id'    => $g['lokasi']['adm3'] ?? null,
@@ -103,8 +105,8 @@ class BmkgService
                     'en'  => $g['cuaca']['weather_desc_en'] ?? null,
                 ],
                 'dateTime' => [
-                    'wib' => $g['cuaca']['local_datetime'] ?? null,
-                    'utc' => $g['cuaca']['datetime'] ?? null,
+                    'local' => $g['cuaca']['local_datetime'] ?? null,
+                    'utc' => $this->convertToUTC($g['cuaca']['datetime'] ?? null),
                 ],
                 'temperature' =>$g['cuaca']['t'] ?? null,
                 'humidity' => $g['cuaca']['hu'].'%' ?? null,
@@ -123,7 +125,7 @@ class BmkgService
         return $this->sendRequestWeather('/df/v1/forecast/coord?lon=' . $longitude . '&lat=' . $latitude);
     }
 
-    public function formatWeatherForecast($raw)
+    public function formatWeatherForecast($raw, $index)
     {
         $g = $raw['data'][0] ?? [];
 
@@ -148,6 +150,15 @@ class BmkgService
                 'latitude'  => $g['lokasi']['lat'] ?? null,
                 'longitude' => $g['lokasi']['lon'] ?? null,
             ],
+            'timezone' => [
+                'utc' => $g['lokasi']['timezone'] ?? null,
+                'desc' => match ($g['lokasi']['timezone'] ?? null) {
+                    '+0700' => 'WIB',
+                    '+0800' => 'WITA',
+                    '+0900' => 'WIT',
+                    default => '-'
+                },
+            ],
             'weather' => array_map(function ($forecast) {
             return [
                 'weatherId'     => $forecast['weather'] ?? null,
@@ -157,8 +168,8 @@ class BmkgService
                     'en' => $forecast['weather_desc_en'] ?? null,
                 ],
                 'dateTime' => [
-                    'wib' => $forecast['local_datetime'] ?? null,
-                    'utc' => $forecast['datetime'] ?? null,
+                    'local' => $forecast['local_datetime'] ?? null,
+                    'utc' => $this->convertToUTC($forecast['datetime'] ?? null),
                 ],
                 'temperature'   => $forecast['t'] ?? null,
                 'humidity'      => isset($forecast['hu']) ? $forecast['hu'] . '%' : null,
@@ -169,8 +180,18 @@ class BmkgService
                 'cloudiness'    => isset($forecast['tcc']) ? $forecast['tcc'] . '%' : null,
                 'visibility'    => $forecast['vs_text'] ?? null,
             ];
-        }, $g['cuaca'][0] ?? []),
+        }, $g['cuaca'][$index] ?? []),
         ];
+    }
+
+    private function convertToUTC($datetime)
+    {
+        if ($datetime) {
+            $dateTimeObj = new DateTime($datetime, new DateTimeZone('Asia/Jakarta')); // Ganti timezone sesuai yang ada
+            $dateTimeObj->setTimezone(new DateTimeZone('UTC'));
+            return $dateTimeObj->format('Y-m-d H:i:s');
+        }
+        return null;
     }
 
     public function getEarlyWarning($longitude, $latitude)

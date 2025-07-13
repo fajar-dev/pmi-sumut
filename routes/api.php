@@ -13,9 +13,12 @@ Route::prefix('/siamo-service')->group(function () {
 });  
 
 Route::prefix('/bmkg-service')->group(function () {
-    Route::get('/lastest-earthquake', [BmkgServiceController::class, 'latestEarthquake']);
-    Route::get('/current-weather', [BmkgServiceController::class, 'currentWeather']);
-    Route::get('/forecast-weather', [BmkgServiceController::class, 'forecastWeather']);
-    Route::get('/early-warning', [BmkgServiceController::class, 'earlyWarning']);
-    
+    Route::prefix('/weather')->group(function () {
+        Route::get('/current', [BmkgServiceController::class, 'currentWeather']);
+        Route::get('/forecast', [BmkgServiceController::class, 'forecastWeather']);
+        Route::get('/early-warning', [BmkgServiceController::class, 'earlyWarning']);
+    });  
+    Route::prefix('/earthquake')->group(function () {
+        Route::get('/lastest', [BmkgServiceController::class, 'latestEarthquake']);
+    });  
 });  
