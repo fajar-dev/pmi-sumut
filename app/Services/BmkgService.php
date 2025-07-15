@@ -160,27 +160,27 @@ class BmkgService
                 },
             ],
             'weather' => array_map(function ($forecast) {
-            return [
-                'weatherId'     => $forecast['weather'] ?? null,
-                'icon'          => $forecast['image'] ?? null,
-                'description'   => [
-                    'id' => $forecast['weather_desc'] ?? null,
-                    'en' => $forecast['weather_desc_en'] ?? null,
-                ],
-                'dateTime' => [
-                    'local' => $forecast['local_datetime'] ?? null,
-                    'utc' => $this->convertToUTC($forecast['datetime'] ?? null),
-                ],
-                'temperature'   => $forecast['t'] ?? null,
-                'humidity'      => isset($forecast['hu']) ? $forecast['hu'] . '%' : null,
-                'wind' => [
-                    'speed'     => isset($forecast['ws']) ? $forecast['ws'] . ' km/jam' : null,
-                    'direction' => $forecast['wd'] ?? null,
-                ],
-                'cloudiness'    => isset($forecast['tcc']) ? $forecast['tcc'] . '%' : null,
-                'visibility'    => $forecast['vs_text'] ?? null,
-            ];
-        }, $g['cuaca'][$index] ?? []),
+                return [
+                    'weatherId'     => $forecast['weather'] ?? null,
+                    'icon'          => $forecast['image'] ?? null,
+                    'description'   => [
+                        'id' => $forecast['weather_desc'] ?? null,
+                        'en' => $forecast['weather_desc_en'] ?? null,
+                    ],
+                    'dateTime' => [
+                        'local' => $forecast['local_datetime'] ?? null,
+                        'utc' => $this->convertToUTC($forecast['datetime'] ?? null),
+                    ],
+                    'temperature'   => $forecast['t'] ?? null,
+                    'humidity'      => isset($forecast['hu']) ? $forecast['hu'] . '%' : null,
+                    'wind' => [
+                        'speed'     => isset($forecast['ws']) ? $forecast['ws'] . ' km/jam' : null,
+                        'direction' => $forecast['wd'] ?? null,
+                    ],
+                    'cloudiness'    => isset($forecast['tcc']) ? $forecast['tcc'] . '%' : null,
+                    'visibility'    => $forecast['vs_text'] ?? null,
+                ];
+            }, $g['cuaca'][$index] ?? []),
         ];
     }
 

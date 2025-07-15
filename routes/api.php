@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AyodonorServiceController;
 use App\Http\Controllers\Api\BmkgServiceController;
 use App\Http\Controllers\Api\GeoCodeController;
 use App\Http\Controllers\Api\SiamoServiceController;
@@ -22,3 +23,9 @@ Route::prefix('/bmkg-service')->group(function () {
         Route::get('/lastest', [BmkgServiceController::class, 'latestEarthquake']);
     });  
 });  
+
+Route::prefix('/ayodonor-service')->group(function () {
+    Route::get('/blood-stock/{id}', [AyodonorServiceController::class, 'bloodStock']);
+    Route::get('/mobile-unit/{id}', [AyodonorServiceController::class, 'mobileUnit']);
+    Route::get('/contact/{id?}', [AyodonorServiceController::class, 'contact']);
+}); 
