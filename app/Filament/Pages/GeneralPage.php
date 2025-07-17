@@ -52,7 +52,9 @@ class GeneralPage extends Page implements HasForms
                             ->maxLength(500)
                             ->columnSpanFull(),
                         FileUpload::make('logo')->image()->directory('general/logo')->required()->columnSpanFull(),
-
+                        TextInput::make('donation_url')
+                            ->required()
+                            ->columnSpanFull(),
                     ]
                 )->columns(2),
                 Section::make('About')->schema(
@@ -96,10 +98,10 @@ class GeneralPage extends Page implements HasForms
                         TextInput::make('social_youtube')
                             ->required()
                             ->url(),
-                        TextInput::make('social_linkedin')
+                        TextInput::make('social_facebook')
                             ->required()
                             ->url(),
-                        TextInput::make('social_tiktok')
+                        TextInput::make('social_twitter')
                             ->required()
                             ->url(),
                     ]

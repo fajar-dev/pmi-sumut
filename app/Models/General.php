@@ -18,6 +18,7 @@ class General extends Model
         'subtitle',
         'logo',
         'meta_description',
+        'donation_url',
         'about_photo',
         'about_name',
         'about_description',
@@ -31,8 +32,8 @@ class General extends Model
         'maps_url',
         'social_instagram',
         'social_youtube',
-        'social_linkedin',
-        'social_tiktok',
+        'social_facebook',
+        'social_twitter',
     ];
 
 }

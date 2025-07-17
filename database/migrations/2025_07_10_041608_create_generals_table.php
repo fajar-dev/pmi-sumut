@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('subtitle');
             $table->text('meta_description');
             $table->string('logo');
+            $table->string('donation_url');
 
             $table->string('about_photo');
             $table->string('about_name');
@@ -34,8 +35,8 @@ return new class extends Migration
 
             $table->string('social_instagram');
             $table->string('social_youtube');
-            $table->string('social_linkedin');
-            $table->string('social_tiktok');
+            $table->string('social_facebook');
+            $table->string('social_twiter');
 
             $table->timestamps();
         });
