@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
@@ -18,6 +19,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\PageResource\Pages;
+use AmidEsfahani\FilamentTinyEditor\TinyEditor;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PageResource\RelationManagers;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
@@ -68,9 +70,16 @@ class PageResource extends Resource implements HasShieldPermissions
                                 $set('slug', Str::slug($state));
                             }),
                         TextInput::make('slug')->required()->minLength(1)->unique(ignoreRecord: true)->maxLength(150),
-                        RichEditor::make('content')
-                            ->required()
-                            ->fileAttachmentsDirectory('pages/images')->columnSpanFull(),
+                        Textarea::make('description')
+                        ->maxLength(255)
+                        ->columnSpanFull(),
+                        TinyEditor::make('content')
+                            ->fileAttachmentsDisk('public')
+                            ->fileAttachmentsVisibility('public')
+                            ->fileAttachmentsDirectory('pages/images')
+                            ->profile('default|simple|full|minimal|none|custom')
+                            ->columnSpan('full')
+                            ->required(),
                         Select::make('user_id')
                             ->relationship('author', 'name')
                             ->searchable()
@@ -93,8 +102,8 @@ class PageResource extends Resource implements HasShieldPermissions
                     ->sortable()
                     ->searchable()
                     ->formatStateUsing(fn ($state) => '/page/' . $state)
-                    ->url(fn ($record) => url('/page/' . $record->slug), true)
-                    ->openUrlInNewTab(),           
+                    ->url(fn ($record) => url('/page/' . $record->slug), true),
+                TextColumn::make('description')->sortable()->searchable(),
                 TextColumn::make('author.name')->sortable()->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

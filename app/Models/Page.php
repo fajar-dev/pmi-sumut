@@ -20,6 +20,7 @@ class Page extends Model
 
     protected $fillable = [
         'user_id',
+        'description',
         'title',
         'image',
         'slug',

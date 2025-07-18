@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('title');
             $table->string('slug')->unique();
+            $table->text('decription')->nullable();
             $table->text('content');
             $table->softDeletes();
             $table->timestamps();
