@@ -69,6 +69,7 @@ class PageResource extends Resource implements HasShieldPermissions
 
                                 $set('slug', Str::slug($state));
                             }),
+                        TextInput::make('route')->required()->minLength(1)->default('page')->maxLength(150),
                         TextInput::make('slug')->required()->minLength(1)->unique(ignoreRecord: true)->maxLength(150),
                         Textarea::make('description')
                         ->maxLength(255)
@@ -101,8 +102,7 @@ class PageResource extends Resource implements HasShieldPermissions
                     ->label('URL Slug')
                     ->sortable()
                     ->searchable()
-                    ->formatStateUsing(fn ($state) => '/page/' . $state)
-                    ->url(fn ($record) => url('/page/' . $record->slug), true),
+                    ->formatStateUsing(fn ($state, $record) => '/' . $record->route . '/' . $state),
                 TextColumn::make('description')->sortable()->searchable(),
                 TextColumn::make('author.name')->sortable()->searchable(),
                 TextColumn::make('created_at')

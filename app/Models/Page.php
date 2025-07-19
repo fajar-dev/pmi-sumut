@@ -23,6 +23,7 @@ class Page extends Model
         'description',
         'title',
         'image',
+        'route',
         'slug',
         'content'
     ];

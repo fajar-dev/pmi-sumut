@@ -20,6 +20,7 @@ return new class extends Migration
                 ->onDelete('set null');
             $table->string('image')->nullable();
             $table->string('title');
+            $table->string('route');
             $table->string('slug')->unique();
             $table->text('decription')->nullable();
             $table->text('content');
@@ -28,6 +29,7 @@ return new class extends Migration
 
             $table->index('slug');
             $table->index('title');
+            $table->index('route');
         });
     }
 
