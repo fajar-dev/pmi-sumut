@@ -54,6 +54,9 @@ class ServiceResource extends Resource implements HasShieldPermissions
                 Textarea::make('description')
                         ->required()
                         ->maxLength(255)->columnSpanFull(),
+                TextInput::make('contact_person')
+                        ->required()
+                        ->type('number')->columnSpanFull(),
                 TextInput::make('cta_url')
                         ->required()
                         ->maxLength(255)->columnSpanFull(),
@@ -67,6 +70,7 @@ class ServiceResource extends Resource implements HasShieldPermissions
                 ImageColumn::make('icon'),
                 TextColumn::make('title')->sortable()->searchable(),
                 TextColumn::make('description')->sortable()->searchable(),
+                TextColumn::make('contact_person')->sortable()->searchable(),
                 TextColumn::make('cta_url')->sortable()->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

@@ -17,6 +17,7 @@ class Service extends Model
         'icon',
         'title',
         'description',
-        'cta_url'
+        'cta_url',
+        'contact_person'
     ];
 }
