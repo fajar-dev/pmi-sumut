@@ -115,6 +115,11 @@ class SubMenuResource extends Resource implements HasShieldPermissions
                 ]),
             ]);
     }
+    
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->sorted();
+    }
 
     public static function getPages(): array
     {

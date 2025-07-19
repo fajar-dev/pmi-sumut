@@ -27,4 +27,13 @@ class SubMenu extends Model
     {
         return $this->belongsTo(Menu::class, 'menu_id');
     }
+
+    public function scopeSorted($query)
+    {
+        return $query
+            ->leftJoin('menus', 'sub_menus.menu_id', '=', 'menus.id')
+            ->orderBy('menus.sort')
+            ->orderBy('sub_menus.sort')
+            ->select('sub_menus.*');
+    }
 }

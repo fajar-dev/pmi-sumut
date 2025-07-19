@@ -86,7 +86,7 @@ class MenuResource extends Resource implements HasShieldPermissions
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ])->defaultSort('sort')
             ->filters([
                 //
             ])
