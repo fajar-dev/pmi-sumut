@@ -51,7 +51,7 @@ class AyodonorServiceController extends Controller
         }
     }
 
-    public function contact($id = null){
+    public function bloodDonorUnit($id = null){
         try{
             $result = $this->ayodonorService->getContact();
             if (!$result || !isset($result['data'])) {

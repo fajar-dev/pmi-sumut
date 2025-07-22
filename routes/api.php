@@ -27,5 +27,5 @@ Route::prefix('/bmkg-service')->group(function () {
 Route::prefix('/ayodonor-service')->group(function () {
     Route::get('/blood-stock/{id}', [AyodonorServiceController::class, 'bloodStock']);
     Route::get('/mobile-unit/{id}', [AyodonorServiceController::class, 'mobileUnit']);
-    Route::get('/contact/{id?}', [AyodonorServiceController::class, 'contact']);
+    Route::get('/blood-donor-unit/{id?}', [AyodonorServiceController::class, 'bloodDonorUnit']);
 }); 
