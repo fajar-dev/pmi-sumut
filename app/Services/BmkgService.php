@@ -125,9 +125,26 @@ class BmkgService
         return $this->sendRequestWeather('/df/v1/forecast/coord?lon=' . $longitude . '&lat=' . $latitude);
     }
 
-    public function formatWeatherForecast($raw, $index)
+    public function formatWeatherForecast($raw, $index = null)
     {
         $g = $raw['data'][0] ?? [];
+
+        $weatherArray = [];
+        if ($index === null || $index === '') {
+        $weatherArray = [];
+            if (isset($g['cuaca']) && is_array($g['cuaca'])) {
+                foreach ($g['cuaca'] as $subArray) {
+                    if (is_array($subArray)) {
+                        $weatherArray = array_merge($weatherArray, $subArray);
+                    }
+                }
+                $weatherArray = array_slice($weatherArray, 0, 24);
+            }
+        } else {
+            $idx = (int)$index;
+            $weatherArray = $g['cuaca'][$idx] ?? [];
+        }
+
 
         return [
             'administrativeAreaLevel1' => [
@@ -180,9 +197,10 @@ class BmkgService
                     'cloudiness'    => isset($forecast['tcc']) ? $forecast['tcc'] . '%' : null,
                     'visibility'    => $forecast['vs_text'] ?? null,
                 ];
-            }, $g['cuaca'][$index] ?? []),
+            }, $weatherArray),
         ];
     }
+
 
     private function convertToUTC($datetime)
     {

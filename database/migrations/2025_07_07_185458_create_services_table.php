@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('cta_url');
+            $table->string('contact_person');
             $table->timestamps();
 
             $table->index('title');

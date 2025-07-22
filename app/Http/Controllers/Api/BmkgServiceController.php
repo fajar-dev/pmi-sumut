@@ -55,7 +55,7 @@ class BmkgServiceController extends Controller
     {
         $longitude = $request->input('longitude', $this->defaultWeatherLongitude);
         $latitude = $request->input('latitude', $this->defaultWeatherLatitude);
-        $index = $request->input('index', 0);
+        $index = $request->input('index', null);
 
         try {
             $result = $this->bmkgService->getForecastWeather($longitude, $latitude);
