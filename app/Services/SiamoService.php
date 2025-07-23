@@ -85,4 +85,62 @@ class SiamoService
 
         return $resultData;
     }
+
+    public function getOffice($city, $query)
+    {
+        $payload = [
+            'method'    => 'search',
+            'provinsi'  => $this->provinceId,
+            'kabupaten' => $city,
+            'markas' => true,
+            'query' => $query
+        ];
+
+        return $this->sendRequest('/getApiMIS/search_markas', $payload);
+    }
+
+    public function formatOfficeData($raw, $type)
+    {
+        if (!isset($raw['data']) || !is_array($raw['data'])) {
+            return [];
+        }
+
+        $offices = $raw['data'];
+        $filtered = [];
+
+        if ($type === '1') {
+            $allowedLevels = ['KABUPATEN', 'KOTA'];
+        } elseif ($type === '2') {
+            $allowedLevels = ['KECAMATAN'];
+        } else {
+            $allowedLevels = ['KABUPATEN', 'KOTA', 'KECAMATAN'];
+        }
+
+        foreach ($offices as $office) {
+            if (!in_array(strtoupper($office['akses_level'] ?? ''), $allowedLevels)) {
+                continue;
+            }
+
+            $filtered[] = [
+                'id' => (int) $office['id'] ?? null,
+                'name' => $office['markas'] ?? $office['nama'],
+                'phone' => $office['no_telpon'] ?? null,
+                'email' => $office['email'] ?? '',
+                'locaion' => [
+                    'province'=> $office['nama_provinsi'] ?? '',
+                    'city'  => $office['nama_kabupaten'] ?? '',
+                    'address' => $office['alamat'] ?? '',
+                    'coordinate' => [
+                        'longitude' => $office['long'] ?? null,
+                        'latitude' => $office['lat'] ?? null,
+                    ]
+                ],
+                'type' => [
+                    'levelId' => (int) $office['id_level'] ?? null,
+                    'name' => $office['akses_level'] ?? '',
+                ],
+            ];
+        }
+        return $filtered;
+    }
 }

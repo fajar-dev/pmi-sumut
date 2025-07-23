@@ -40,4 +40,25 @@ class SiamoServiceController extends Controller
         }
     }
 
+    public function office(Request $request)
+    {
+        $administativeArea = $request->input('administativeArea');
+        $search = $request->input('q', '');
+        $type = $request->input('type');
+
+        try {
+            $result = $this->siamoService->getOffice($administativeArea, $search);
+
+            if (isset($result['success']) && $result['success'] === false) {
+                return Response::unauthorized();
+            }
+
+            $data = $this->siamoService->formatOfficeData($result, $type);
+            return Response::success($data, 'office retrieved successfully');
+
+        } catch (\Exception $e) {
+            return Response::error('null', 'Internal Server Error', 500);
+        }
+    }
+
 }

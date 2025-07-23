@@ -11,6 +11,7 @@ Route::get('/geocode', [GeoCodeController::class, 'geoCode']);
 
 Route::prefix('/siamo-service')->group(function () {
     Route::get('/member-count', [SiamoServiceController::class, 'memberCount']);
+    Route::get('/office', [SiamoServiceController::class, 'office']);
 });  
 
 Route::prefix('/bmkg-service')->group(function () {
